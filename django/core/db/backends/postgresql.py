@@ -5,7 +5,8 @@ Requires psycopg 1: http://initd.org/projects/psycopg1
 """
 
 from django.core.db import base, typecasts
-import psycopg as Database
+import psycopg2 as Database
+import psycopg2.extensions  as extensions
 
 DatabaseError = Database.DatabaseError
 
@@ -58,10 +59,10 @@ def get_last_insert_id(cursor, table_name, pk_name):
 # Register these custom typecasts, because Django expects dates/times to be
 # in Python's native (standard-library) datetime/time format, whereas psycopg
 # use mx.DateTime by default.
-Database.register_type(Database.new_type((1082,), "DATE", typecasts.typecast_date))
-Database.register_type(Database.new_type((1083,1266), "TIME", typecasts.typecast_time))
-Database.register_type(Database.new_type((1114,1184), "TIMESTAMP", typecasts.typecast_timestamp))
-Database.register_type(Database.new_type((16,), "BOOLEAN", typecasts.typecast_boolean))
+extensions.register_type(extensions.new_type((1082,), "DATE", typecasts.typecast_date))
+extensions.register_type(extensions.new_type((1083,1266), "TIME", typecasts.typecast_time))
+extensions.register_type(extensions.new_type((1114,1184), "TIMESTAMP", typecasts.typecast_timestamp))
+extensions.register_type(extensions.new_type((16,), "BOOLEAN", typecasts.typecast_boolean))
 
 OPERATOR_MAPPING = {
     'exact': '=',
